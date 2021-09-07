@@ -3,41 +3,44 @@
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <!-- Add icons to the links using the .nav-icon class
 with font-awesome or any other icon font library -->
-        <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-tachometer-alt"></i>
+        <li
+            class="nav-item {{ request()->is('country*') || request()->is('travel_package*') || request()->is('gallery*') ? 'menu-open' : '' }}">
+            <a href="#"
+                class="nav-link {{ request()->is('country*') || request()->is('travel_package*') || request()->is('gallery*') ? 'active' : '' }}">
+                <i class="nav-icon fas fa-folder"></i>
                 <p>
-                    Dashboard
+                    Master
                     <i class="right fas fa-angle-left"></i>
                 </p>
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="../../index.html" class="nav-link">
+                    <a href="{{ route('country') }}" class="nav-link {{ request()->is('country*') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Dashboard v1</p>
+                        <p>Country</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="../../index2.html" class="nav-link">
+                    <a href="{{ route('travel_package') }}"
+                        class="nav-link {{ request()->is('travel_package*') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Dashboard v2</p>
+                        <p>Travel Package</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="../../index3.html" class="nav-link">
+                    <a href="{{ route('gallery') }}" class="nav-link {{ request()->is('gallery*') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Dashboard v3</p>
+                        <p>Gallery</p>
                     </a>
                 </li>
             </ul>
         </li>
-        <li class="nav-item">
-            <a href="../widgets.html" class="nav-link">
-                <i class="nav-icon fas fa-th"></i>
+        <li class="nav-item {{ request()->is('travel_offer*') ? 'active' : '' }}">
+            <a href="{{ route('travel_offer') }}" class="nav-link {{ request()->is('travel_offer*') ? 'active' : '' }}">
+                <i class="nav-icon fas fa-plane"></i>
                 <p>
-                    Widgets
-                    <span class="right badge badge-danger">New</span>
+                    Travel Offers
+                    {{-- <span class="right badge badge-danger">New</span> --}}
                 </p>
             </a>
         </li>

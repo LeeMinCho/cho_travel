@@ -2,26 +2,24 @@
 
 namespace App\Http\Livewire;
 
-use Livewire\WithPagination;
-use Livewire\Component;
 use App\Models\TravelPackage;
+use Livewire\WithPagination;
+use Illuminate\Support\Str;
+use App\Models\Country;
+use Livewire\Component;
 
 class TravelPackageComponent extends Component
 {
     use WithPagination;
 
     public $idTravelPackage;
-    	public $title;
-	public $slug;
-	public $about;
-	public $featured_event;
-	public $language;
-	public $foods;
-	public $country_id;
-	public $created_at;
-	public $updated_at;
-	public $deleted_at;
-	
+    public $title;
+    public $slug;
+    public $about;
+    public $featured_event;
+    public $language;
+    public $foods;
+    public $country_id;
     public $isEdit = false;
     public $search;
 
@@ -30,53 +28,40 @@ class TravelPackageComponent extends Component
     public function rules()
     {
         return [
-			'id' => 'required',
-			'title' => 'required',
-			'slug' => 'required',
-			'about' => 'required',
-			'featured_event' => 'required',
-			'language' => 'required',
-			'foods' => 'required',
-			'country_id' => 'required',
-			'created_at' => 'required',
-			'updated_at' => 'required',
-			'deleted_at' => 'required',
-			];
+            'title' => 'required',
+            'about' => 'required',
+            'featured_event' => 'required',
+            'language' => 'required',
+            'foods' => 'required',
+            'country_id' => 'required',
+        ];
     }
 
     private function data()
     {
         return [
-			'id' => $this->id,
-			'title' => $this->title,
-			'slug' => $this->slug,
-			'about' => $this->about,
-			'featured_event' => $this->featured_event,
-			'language' => $this->language,
-			'foods' => $this->foods,
-			'country_id' => $this->country_id,
-			'created_at' => $this->created_at,
-			'updated_at' => $this->updated_at,
-			'deleted_at' => $this->deleted_at,
-			];
+            'title' => $this->title,
+            'slug' => Str::slug($this->title),
+            'about' => $this->about,
+            'featured_event' => $this->featured_event,
+            'language' => $this->language,
+            'foods' => $this->foods,
+            'country_id' => $this->country_id,
+        ];
     }
 
     public function create()
     {
-        		$this->idTravelPackage = '';
-		$this->id = '';
-		$this->title = '';
-		$this->slug = '';
-		$this->about = '';
-		$this->featured_event = '';
-		$this->language = '';
-		$this->foods = '';
-		$this->country_id = '';
-		$this->created_at = '';
-		$this->updated_at = '';
-		$this->deleted_at = '';
-		
+        $this->idTravelPackage = '';
+        $this->title = '';
+        $this->slug = '';
+        $this->about = '';
+        $this->featured_event = '';
+        $this->language = '';
+        $this->foods = '';
+        $this->country_id = '';
         $this->isEdit = false;
+        $this->emit("countryId", $this->country_id);
         $this->resetValidation();
     }
 
@@ -84,19 +69,15 @@ class TravelPackageComponent extends Component
     {
         $data = TravelPackage::find($id);
         $this->idTravelPackage = $id;
-        		$this->id = $data->id;
-		$this->title = $data->title;
-		$this->slug = $data->slug;
-		$this->about = $data->about;
-		$this->featured_event = $data->featured_event;
-		$this->language = $data->language;
-		$this->foods = $data->foods;
-		$this->country_id = $data->country_id;
-		$this->created_at = $data->created_at;
-		$this->updated_at = $data->updated_at;
-		$this->deleted_at = $data->deleted_at;
-		
+        $this->title = $data->title;
+        $this->slug = $data->slug;
+        $this->about = $data->about;
+        $this->featured_event = $data->featured_event;
+        $this->language = $data->language;
+        $this->foods = $data->foods;
+        $this->country_id = $data->country_id;
         $this->isEdit = true;
+        $this->emit("countryId", $data->country_id);
         $this->resetValidation();
     }
 
@@ -128,30 +109,28 @@ class TravelPackageComponent extends Component
     private function read()
     {
         if ($this->search) {
-            return TravelPackage::where('id', 'like', '%' . $this->search . '%')
-				->orWhere('title', 'like', '%' . $this->search . '%')
-				->orWhere('slug', 'like', '%' . $this->search . '%')
-				->orWhere('about', 'like', '%' . $this->search . '%')
-				->orWhere('featured_event', 'like', '%' . $this->search . '%')
-				->orWhere('language', 'like', '%' . $this->search . '%')
-				->orWhere('foods', 'like', '%' . $this->search . '%')
-				->orWhere('country_id', 'like', '%' . $this->search . '%')
-				->orWhere('created_at', 'like', '%' . $this->search . '%')
-				->orWhere('updated_at', 'like', '%' . $this->search . '%')
-				->orWhere('deleted_at', 'like', '%' . $this->search . '%')
-
+            return TravelPackage::with(['country'])
+                ->where('title', 'like', '%' . $this->search . '%')
+                ->orWhere('slug', 'like', '%' . $this->search . '%')
+                ->orWhere('about', 'like', '%' . $this->search . '%')
+                ->orWhere('featured_event', 'like', '%' . $this->search . '%')
+                ->orWhere('language', 'like', '%' . $this->search . '%')
+                ->orWhere('foods', 'like', '%' . $this->search . '%')
+                ->orWhere('country_id', 'like', '%' . $this->search . '%')
                 ->orderBy('id', 'desc')
                 ->paginate(5);
         } else {
-            return TravelPackage::orderBy('id', 'desc')
+            return TravelPackage::with(['country'])
+                ->orderBy('id', 'desc')
                 ->paginate(5);
         }
     }
 
     public function render()
     {
+        $data["countries"] = Country::all();
         $data["travel_packages"] = $this->read();
         $data["count_data"] = TravelPackage::count();
-        return view('livewire.travel_package-component', $data)->layout("layouts.admin.template");
+        return view('livewire.travel-package-component', $data)->layout("layouts.admin.template");
     }
 }

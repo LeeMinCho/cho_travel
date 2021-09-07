@@ -94,36 +94,32 @@ class LivewireCrud extends Command
         $i = 1;
         foreach ($columns as $c) {
             // Parameter Component
-            if ($c->column_name != 'id') {
+            if ($c->column_key != 'PRI' && $c->column_name != 'created_at' && $c->column_name != 'updated_at' && $c->column_name != 'deleted_at') {
                 $this->property .= "public $" . $c->column_name . ";\n\t";
+                $this->rules .= "'" . $c->column_name . "' => 'required',\n\t\t\t";
+                $this->data .= "'" . $c->column_name . "' => \$this->" . $c->column_name . ",\n\t\t\t";
+                $this->propertyCreate .= "\$this->" . $c->column_name . " = '';\n\t\t";
+                $this->propertyEdit .= "\$this->" . $c->column_name . " = \$data->" . $c->column_name . ";\n\t\t";
+                if ($i == 1) {
+                    $this->search .= "where('" . $c->column_name . "', 'like', '%' . \$this->search . '%')\n";
+                } else {
+                    $this->search .= "\t\t\t\t->orWhere('" . $c->column_name . "', 'like', '%' . \$this->search . '%')\n";
+                }
+
+                // Parameter View
+                $this->form .= "\t\t\t\t\t<div class='form-group'>
+                    <label for='" . $c->column_name . "'>" . ucwords(str_replace("_", " ", $c->column_name)) . "</label>
+                    <input type='text' id='" . $c->column_name . "' name='" . $c->column_name . "' class='form-control @if(\$errors->has(\"" . $c->column_name . "\")) is-invalid @endif' placeholder='" . ucwords(str_replace("_", " ", $c->column_name)) . "' wire:model.lazy='" . $c->column_name . "'>
+                    @error('" . $c->column_name . "')
+                    <div class='invalid-feedback'>
+                        {{ \$message }}
+                    </div>
+                    @enderror
+                </div>\n";
+                $this->thTable .= "\t\t\t\t\t\t\t<th>" . ucwords(str_replace("_", " ", $c->column_name)) . "</th>\n";
+                $this->tbodyTable .= "\t\t\t\t\t\t\t<td>{{ \$" . $this->singularTableName . "->" . $c->column_name . " }}</td>\n";
+                $i++;
             }
-            $this->rules .= "'" . $c->column_name . "' => 'required',\n\t\t\t";
-            $this->data .= "'" . $c->column_name . "' => \$this->" . $c->column_name . ",\n\t\t\t";
-            $this->propertyCreate .= "\$this->" . $c->column_name . " = '';\n\t\t";
-            $this->propertyEdit .= "\$this->" . $c->column_name . " = \$data->" . $c->column_name . ";\n\t\t";
-
-            if ($i == 1) {
-                $this->search .= "where('" . $c->column_name . "', 'like', '%' . \$this->search . '%')\n";
-            } else {
-                $this->search .= "\t\t\t\t->orWhere('" . $c->column_name . "', 'like', '%' . \$this->search . '%')\n";
-            }
-
-            // Parameter View
-            $this->form .= "\t\t\t\t\t<div class='form-group'>
-                <label for='" . $c->column_name . "'>" . ucwords(str_replace("_", " ", $c->column_name)) . "</label>
-                <input type='text' id='" . $c->column_name . "' name='" . $c->column_name . "' class='form-control @error('" . $c->column_name . "')
-                    is-invalid
-                @enderror' placeholder='" . ucwords(str_replace("_", " ", $c->column_name)) . "' wire:model.lazy='" . $c->column_name . "'>
-                @error('" . $c->column_name . "')
-                <div class='invalid-feedback'>
-                    {{ \$message }}
-                </div>
-                @enderror
-            </div>\n";
-            $this->thTable .= "\t\t\t\t\t\t\t<th>" . ucwords(str_replace("_", " ", $c->column_name)) . "</th>\n";
-            $this->tbodyTable .= "\t\t\t\t\t\t\t<td>{{ \$" . $this->singularTableName . "->" . $c->column_name . " }}</td>\n";
-
-            $i++;
         }
         $this->totalColumn = $i;
         $this->rules .= "]";
@@ -137,17 +133,17 @@ class LivewireCrud extends Command
 
         $fileOriginalString = $this->file->get($fileOrigin);
 
-        $replaceFileOriginalString = str_replace(['{{modelName}}', '{{property}}', '{{rules}}', '{{data}}', '{{propertyCreate}}', '{{propertyEdit}}', '{{search}}', '{{tableName}}', '{{singularTableName}}'], [$this->modelName, $this->property, $this->rules, $this->data, $this->propertyCreate, $this->propertyEdit, $this->search, $this->tableName, $this->singularTableName], $fileOriginalString);
+        $replaceFileOriginalString = str_replace(['{{modelName}}', '{{property}}', '{{rules}}', '{{data}}', '{{propertyCreate}}', '{{propertyEdit}}', '{{search}}', '{{tableName}}', '{{singularTableName}}'], [$this->modelName, $this->property, $this->rules, $this->data, $this->propertyCreate, $this->propertyEdit, $this->search, $this->tableName, str_replace('_', '-', $this->singularTableName)], $fileOriginalString);
         $this->file->put($fileDestination, $replaceFileOriginalString);
     }
 
     protected function generateLivewireView()
     {
         $fileOrigin = base_path('stubs/custom.livewire.view.stub');
-        $fileDestination = base_path('resources/views/livewire/' . $this->singularTableName . '-component.blade.php');
+        $fileDestination = base_path('resources/views/livewire/' . str_replace('_', '-', $this->singularTableName) . '-component.blade.php');
 
         $fileOriginalString = $this->file->get($fileOrigin);
-        $replaceFileOriginalString = str_replace(['{{modelName}}', '{{singularTableName}}', '{{form}}', '{{thTable}}', '{{tableName}}', '{{tbodyTable}}', '{{totalColumn}}'], [$this->modelName, $this->singularTableName, $this->form, $this->thTable, $this->tableName, $this->tbodyTable, ($this->totalColumn + 1)], $fileOriginalString);
+        $replaceFileOriginalString = str_replace(['{{modelName}}', '{{singularTableName}}', '{{form}}', '{{thTable}}', '{{tableName}}', '{{tbodyTable}}', '{{totalColumn}}', '{{modalName}}'], [$this->modelName, $this->singularTableName, $this->form, $this->thTable, $this->tableName, $this->tbodyTable, ($this->totalColumn + 1), str_replace('_', '-', $this->singularTableName)], $fileOriginalString);
         $this->file->put($fileDestination, $replaceFileOriginalString);
     }
 }

@@ -1,5 +1,5 @@
 @section('title')
-{{modelName}}
+Country
 @endsection
 <div>
     <div class="card">
@@ -7,7 +7,7 @@
             <div class="row mb-3">
                 <div class="col-md-2">
                     <button type="button" class="btn btn-block btn-primary" data-toggle="modal"
-                        data-target="#modal-{{modalName}}" data-backdrop="static" wire:click="create()">
+                        data-target="#modal-country" data-backdrop="static" wire:click="create()">
                         <i class="fas fa-plus-circle"></i> Add
                     </button>
                 </div>
@@ -25,25 +25,30 @@
                     <thead>
                         <tr>
                             <th>No.</th>
-                            {{thTable}}
+                            <th>Code</th>
+                            <th>Name</th>
+
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse (${{tableName}} as ${{singularTableName}})
+                        @forelse ($countries as $country)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            {{tbodyTable}}
+                            <td>{{ $country->code }}</td>
+                            <td>{{ $country->name }}</td>
+
                             <td>
                                 <button type="button" class="btn btn-warning" data-toggle="modal"
-                                    data-target="#modal-{{modalName}}" data-backdrop="static" wire:click="edit({{ ${{singularTableName}}->id }})">
+                                    data-target="#modal-country" data-backdrop="static"
+                                    wire:click="edit({{ $country->id }})">
                                     <i class="fas fa-edit"></i> Edit
                                 </button>
                             </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="{{totalColumn}}">No Data</td>
+                            <td colspan="4">No Data</td>
                         </tr>
                         @endforelse
                     </tbody>
@@ -52,29 +57,51 @@
             <div class="row">
                 <div class="col-md-6">
                     <i>Total Record: {{ $count_data }} @if ($search)
-                        Filtered: {{ ${{tableName}}->total() }}
+                        Filtered: {{ $countries->total() }}
                         @endif</i>
                 </div>
                 <div class="col-md-6">
                     <div class="float-right">
-                        {!! ${{tableName}}->links() !!}
+                        {!! $countries->links() !!}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="modal-{{modalName}}" wire:ignore.self>
+    <div class="modal fade" id="modal-country" wire:ignore.self>
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">@if ($isEdit) Edit @else Create @endif {{modelName}}</h4>
+                    <h4 class="modal-title">@if ($isEdit) Edit @else Create @endif Country</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    {{form}}
+                    <div class='form-group'>
+                        <label for='code'>Code</label>
+                        <input type='text' id='code' name='code'
+                            class='form-control @if($errors->has("code")) is-invalid @endif' placeholder='Code'
+                            wire:model.lazy='code'>
+                        @error('code')
+                        <div class='invalid-feedback'>
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class='form-group'>
+                        <label for='name'>Name</label>
+                        <input type='text' id='name' name='name'
+                            class='form-control @if($errors->has("name")) is-invalid @endif' placeholder='Name'
+                            wire:model.lazy='name'>
+                        @error('name')
+                        <div class='invalid-feedback'>
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -92,7 +119,7 @@
     @push('custom-scripts')
     <script>
         window.livewire.on('btnSave', (message) => {
-            $('#modal-{{modalName}}').modal('hide');
+            $('#modal-country').modal('hide');
             Swal.fire({
                 icon: 'success',
                 title: 'Success',

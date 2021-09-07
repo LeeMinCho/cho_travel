@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Livewire\CountryComponent;
+use App\Http\Livewire\GalleryComponent;
 use App\Http\Livewire\RoleComponent;
+use App\Http\Livewire\TravelOfferComponent;
 use App\Http\Livewire\TravelPackageComponent;
 use Illuminate\Support\Facades\Route;
 /*
@@ -19,4 +22,7 @@ Route::get('/', function () {
 });
 
 Route::get('/role', RoleComponent::class);
-Route::get('/travel_package', TravelPackageComponent::class);
+Route::get('/travel_package', TravelPackageComponent::class)->name('travel_package');
+Route::get('/country', CountryComponent::class)->name('country');
+Route::get('/gallery', GalleryComponent::class)->name('gallery');
+Route::get('/travel_offer', TravelOfferComponent::class)->name('travel_offer');
