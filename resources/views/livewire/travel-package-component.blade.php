@@ -31,7 +31,7 @@ Travel Package
                             <th>Featured Event</th>
                             <th>Language</th>
                             <th>Foods</th>
-                            <th>Country Id</th>
+                            <th>Country</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -41,11 +41,11 @@ Travel Package
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $travel_package->title }}</td>
                             <td>{{ $travel_package->slug }}</td>
-                            <td>{{ $travel_package->about }}</td>
+                            <td>{!! $travel_package->about !!}</td>
                             <td>{{ $travel_package->featured_event }}</td>
                             <td>{{ $travel_package->language }}</td>
                             <td>{{ $travel_package->foods }}</td>
-                            <td>{{ $travel_package->country["name"] }}</td>
+                            <td>{{ $travel_package->country->name }}</td>
                             <td>
                                 <button type="button" class="btn btn-warning" data-toggle="modal"
                                     data-target="#modal-travel-package" data-backdrop="static"
@@ -78,7 +78,7 @@ Travel Package
     </div>
 
     <div class="modal fade" id="modal-travel-package" wire:ignore.self>
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">@if ($isEdit) Edit @else Create @endif Travel Package</h4>
@@ -93,17 +93,6 @@ Travel Package
                             class='form-control @if($errors->has("title")) is-invalid @endif' placeholder='Title'
                             wire:model.lazy='title'>
                         @error('title')
-                        <div class='invalid-feedback'>
-                            {{ $message }}
-                        </div>
-                        @enderror
-                    </div>
-                    <div class='form-group'>
-                        <label for='about'>About</label>
-                        <textarea id='about' name='about' rows="3"
-                            class='form-control @if($errors->has("about")) is-invalid @endif' placeholder='About'
-                            wire:model.lazy='about'></textarea>
-                        @error('about')
                         <div class='invalid-feedback'>
                             {{ $message }}
                         </div>
@@ -142,18 +131,36 @@ Travel Package
                         </div>
                         @enderror
                     </div>
-                    <div class='form-group' wire:ignore>
-                        <label for='country_id'>Country Id</label>
-                        <select id='country_id' name='country_id'
-                            class="form-control select2 @if($errors->has('country_id')) is-invalid @endif"
-                            style="width: 100%;">
-                            <option value="">- Choose Country -</option>
-                            @foreach ($countries as $country)
-                            <option value="{{ $country->id }}">{{ $country->name }}</option>
-                            @endforeach
-                        </select>
+                    <div class='form-group'>
+                        <label for='country_id'>Country</label>
+                        <div @if($errors->has('country_id')) class="border border-danger rounded" @endif>
+                            <div wire:ignore>
+                                <select id='country_id' name='country_id' class="form-control select2"
+                                    style="width: 100%;">
+                                    <option value="">- Choose Country -</option>
+                                    @foreach ($countries as $country)
+                                    <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                         @error('country_id')
-                        <div class='invalid-feedback'>
+                        <div class='text-danger small'>
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+                    <input type="hidden" name="about_old" id="about_old" wire:model="about">
+                    <div class='form-group'>
+                        <label for='about'>About</label>
+                        <div @if($errors->has("about")) class="border border-danger rounded" @endif>
+                            <div wire:ignore>
+                                <textarea id='about' name='about' rows="3" class='form-control'
+                                    placeholder='About'></textarea>
+                            </div>
+                        </div>
+                        @error('about')
+                        <div class='text-danger small'>
                             {{ $message }}
                         </div>
                         @enderror
@@ -174,9 +181,22 @@ Travel Package
 
     @push('custom-scripts')
     <script>
+        $('#about').summernote({
+            dialogsInBody: true,
+            callbacks: {
+                onChange: function (contents) {
+                    @this.set('about', contents);
+                }
+            }
+        });
+
         $("#country_id").on("change", function() {
             var country_id = $(this).val();
             @this.set('country_id', country_id);
+        });
+
+        window.livewire.on("about", (about) => {
+            $("#about").summernote("code", about);
         });
 
         window.livewire.on('countryId', (country_id) => {

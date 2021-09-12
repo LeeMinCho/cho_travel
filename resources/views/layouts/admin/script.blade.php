@@ -2,6 +2,8 @@
 <script src="{{ url('assets/backend') }}/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="{{ url('assets/backend') }}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Summernote -->
+<script src="{{ url('assets/backend') }}/plugins/summernote/summernote-bs4.min.js"></script>
 <!-- Select2 -->
 <script src="{{ url('assets/backend') }}/plugins/select2/js/select2.full.min.js"></script>
 <!-- SweetAlert2 -->

@@ -60,8 +60,10 @@ class TravelPackageComponent extends Component
         $this->language = '';
         $this->foods = '';
         $this->country_id = '';
+        $this->about = '';
         $this->isEdit = false;
         $this->emit("countryId", $this->country_id);
+        $this->emit("about", $this->about);
         $this->resetValidation();
     }
 
@@ -78,6 +80,7 @@ class TravelPackageComponent extends Component
         $this->country_id = $data->country_id;
         $this->isEdit = true;
         $this->emit("countryId", $data->country_id);
+        $this->emit("about", $data->about);
         $this->resetValidation();
     }
 
@@ -116,7 +119,9 @@ class TravelPackageComponent extends Component
                 ->orWhere('featured_event', 'like', '%' . $this->search . '%')
                 ->orWhere('language', 'like', '%' . $this->search . '%')
                 ->orWhere('foods', 'like', '%' . $this->search . '%')
-                ->orWhere('country_id', 'like', '%' . $this->search . '%')
+                ->orWhereHas("country", function ($query) {
+                    return $query->where("name", "like", "%" . $this->search . "%");
+                })
                 ->orderBy('id', 'desc')
                 ->paginate(5);
         } else {
