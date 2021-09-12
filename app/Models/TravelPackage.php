@@ -18,6 +18,11 @@ class TravelPackage extends Model
         return $this->belongsTo(Country::class);
     }
 
+    public function travelOffers()
+    {
+        return $this->hasMany(TravelOffer::class);
+    }
+
     public function galleries()
     {
         return $this->hasMany(Gallery::class);
