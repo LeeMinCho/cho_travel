@@ -23,14 +23,15 @@ Gallery
                 <div class="col-md-3">
                     <div class="card">
                         <a href="{{ asset($gallery->image) }}" class="card-img-top" data-toggle="lightbox"
-                            data-title="{{ $gallery->travelPackage["title"] }}" data-gallery="gallery">
+                            data-title="{{ $gallery->travelPackage->title }}" data-gallery="gallery">
                             <img src="{{ asset($gallery->image) }}" class="img-fluid mb-2"
-                                alt="{{ $gallery->travelPackage["title"] }}" />
+                                alt="{{ $gallery->travelPackage->title }}" />
                         </a>
                         <div class="card-body">
-                            <h5 class="card-title">{{ $gallery->travelPackage["title"] }}
-                                ({{ $gallery->travelPackage["country"]["name"] }})</h5>
-                            <p class="card-text">{{ $gallery->travelPackage["about"] }}</p>
+                            <h5 class="card-title">{{ $gallery->travelPackage->title }}
+                                ({{ $gallery->travelPackage->country->name }})</h5>
+                            <p class="card-text" style="text-overflow: ellipsis">{!! $gallery->travelPackage->about !!}
+                            </p>
                             <button type="button" class="btn btn-danger" onclick="deleteImage({{ $gallery->id }})">
                                 <i class="fas fa-trash"></i>
                             </button>
@@ -72,18 +73,21 @@ Gallery
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class='form-group' wire:ignore>
-                        <label for='travel_package_id'>Travel Package Id</label>
-                        <select id='travel_package_id' name='travel_package_id'
-                            class="form-control select2 @if($errors->has('travel_package_id')) is-invalid @endif"
-                            style="width: 100%;">
-                            <option value="">- Choose Travel Package -</option>
-                            @foreach ($travel_packages as $travel_package)
-                            <option value="{{ $travel_package->id }}">{{ $travel_package->title }}</option>
-                            @endforeach
-                        </select>
+                    <div class='form-group'>
+                        <label for='travel_package_id'>Travel Package</label>
+                        <div select2 @if($errors->has('travel_package_id')) class="border border-danger rounded" @endif>
+                            <div wire:ignore>
+                                <select id='travel_package_id' name='travel_package_id' class="form-control select2"
+                                    style="width: 100%;">
+                                    <option value="">- Choose Travel Package -</option>
+                                    @foreach ($travel_packages as $travel_package)
+                                    <option value="{{ $travel_package->id }}">{{ $travel_package->title }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                         @error('travel_package_id')
-                        <div class='invalid-feedback'>
+                        <div class='text-danger small'>
                             {{ $message }}
                         </div>
                         @enderror

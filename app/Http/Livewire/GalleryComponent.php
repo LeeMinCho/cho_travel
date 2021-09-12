@@ -93,8 +93,9 @@ class GalleryComponent extends Component
     {
         if ($this->search) {
             return Gallery::with(['travelPackage'])
-                ->where('travel_package_id', 'like', '%' . $this->search . '%')
-                ->orWhere('image', 'like', '%' . $this->search . '%')
+                ->whereHas("travelPackage", function ($query) {
+                    return $query->where("title", "like", "%" . $this->search . "%");
+                })
                 ->orderBy('id', 'desc')
                 ->paginate(5);
         } else {
