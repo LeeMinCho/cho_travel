@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Livewire\CountryComponent;
 use App\Http\Livewire\GalleryComponent;
 use App\Http\Livewire\RoleComponent;
@@ -21,6 +22,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::post('/login', [AuthController::class, 'login'])->name("login");
+Route::get('/login', [AuthController::class, "index"]);
+Route::get('/register', [AuthController::class, "register"])->name("register");
 Route::get('/role', RoleComponent::class);
 Route::get('/travel_package', TravelPackageComponent::class)->name('travel_package');
 Route::get('/country', CountryComponent::class)->name('country');
