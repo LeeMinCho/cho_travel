@@ -1,7 +1,7 @@
 @extends('layouts.auth.template')
 
 @section('title')
-Login
+Register
 @endsection
 
 @section('content')
@@ -23,7 +23,7 @@ Login
                             {{ session('message') }}
                         </div>
                         @endif
-                        <form action="{{ route('login') }}" method="POST">
+                        <form action="{{ route('register') }}" method="POST">
                             @csrf
                             <div class="form-group">
                                 <label for="email">Email Address</label>

@@ -144,11 +144,8 @@ header {
 .section-popular-content {
   .btn-more-travel {
     border-width: 2px;
-    // border-color: #eaad11;
-    // color: #eaad11;
-    border-color: #2c21aa;
     color: #fff;
-    background-color: #5d51df;
+    background-color: #eaad11;
     font-size: 18px;
 
     &:hover {
@@ -300,6 +297,10 @@ header {
 
   a {
     color: #2c21aa;
+
+    &:hover{
+      text-decoration: none;
+    }
   }
 
   h5 {

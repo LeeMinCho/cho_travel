@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 use App\Http\Livewire\CountryComponent;
 use App\Http\Livewire\GalleryComponent;
 use App\Http\Livewire\RoleComponent;
@@ -18,9 +19,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index']);
 
 Route::post('/login', [AuthController::class, 'login'])->name("login");
 Route::get('/login', [AuthController::class, "index"]);

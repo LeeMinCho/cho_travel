@@ -12,7 +12,7 @@ body {
 
 .navbar {
   -webkit-box-shadow: 3px 3px rgba(33, 44, 170, 0.7);
-          box-shadow: 3px 3px rgba(33, 44, 170, 0.7);
+  box-shadow: 3px 3px rgba(33, 44, 170, 0.7);
 }
 
 .navbar-brand img {
@@ -53,8 +53,7 @@ header {
   background-size: cover;
 }
 
-header h1,
-header p {
+header h1, header p {
   color: #ffffff;
 }
 
@@ -113,8 +112,7 @@ header .btn-get-started:hover {
   margin-top: 100px;
 }
 
-.section-popular h2,
-.section-popular p {
+.section-popular h2, .section-popular p {
   color: #ffffff;
 }
 
@@ -131,9 +129,8 @@ header .btn-get-started:hover {
 
 .section-popular-content .btn-more-travel {
   border-width: 2px;
-  border-color: #2c21aa;
   color: #fff;
-  background-color: #5d51df;
+  background-color: #eaad11;
   font-size: 18px;
 }
 
@@ -152,11 +149,13 @@ header .btn-get-started:hover {
 
 .section-popular-content .section-popular-travel .travel-country {
   font-size: 18px;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
 .section-popular-content .section-popular-travel .travel-location {
   font-size: 24px;
   font-weight: bold;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
 .section-popular-content .section-popular-travel .travel-button .btn-travel-details {
@@ -277,6 +276,10 @@ header .btn-get-started:hover {
 
 .section-footer a {
   color: #2c21aa;
+}
+
+.section-footer a:hover {
+  text-decoration: none;
 }
 
 .section-footer h5 {
@@ -451,7 +454,7 @@ header .btn-get-started:hover {
 .section-details-content .gallery .xzoom-container .xzoom {
   width: 100%;
   -webkit-box-shadow: none;
-          box-shadow: none;
+  box-shadow: none;
   margin-bottom: 10px;
 }
 
@@ -543,9 +546,10 @@ header .btn-get-started:hover {
   font-size: 20px;
   line-height: 26px;
   -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
   text-align: center;
   color: #c4c4c4;
 }
+
 /*# sourceMappingURL=main.css.map */

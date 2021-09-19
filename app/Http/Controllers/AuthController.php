@@ -20,10 +20,9 @@ class AuthController extends Controller
             'email' => 'required',
             'password' => 'required',
         ]);
-        $emailUser = User::where('email', $request->email)->first();
-        if ($emailUser) {
-            $user = User::where('password', Hash::check($request->password, $emailUser->email))->first();
-            if ($user) {
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            if (Hash::check($request->password, $user->password)) {
                 Auth::login($user);
                 return redirect()->to('/country');
             } else {
@@ -38,5 +37,10 @@ class AuthController extends Controller
                 'message' => 'Email is not registered',
             ]);
         }
+    }
+
+    public function registerView()
+    {
+        return view('auth.register');
     }
 }
