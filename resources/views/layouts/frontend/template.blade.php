@@ -25,9 +25,10 @@
                     <li class="nav-item mx-md-2"><a href="#header" class="nav-link active">Home</a></li>
                     <li class="nav-item mx-md-2"><a href="#popular" class="nav-link">Paket Travel</a></li>
                     <li class="nav-item mx-md-2"><a href="#testimonial-title" class="nav-link">Testimonial</a></li>
+                    @if (auth()->user())
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" id="navbardrop" data-toggle="dropdown">
-                            <i class="fas fa-user"></i> LeeMinCho
+                            <i class="fas fa-user"></i> {{ auth()->user()->name }}
                         </a>
                         <div class="dropdown-menu">
                             <div class="dropdown-item text-center">
@@ -38,14 +39,19 @@
                             <a href="#" class="dropdown-item">My Transaction</a>
                         </div>
                     </li>
+                    @endif
                 </ul>
                 <!-- Mobile Button -->
-                <form method="GET" action="{{ url('login') }}" class="form-inline d-sm-block d-md-none">
-                    <button type="submit" class="btn btn-login my-2 my-sm-0">Masuk</button>
+                <form method="GET" action="{{ auth()->user() ? url('logout') : url('login') }}"
+                    class="form-inline d-sm-block d-md-none">
+                    <button type="submit"
+                        class="btn btn-login my-2 my-sm-0">{{ auth()->user() ? 'Keluar' : 'Masuk' }}</button>
                 </form>
                 <!-- Desktop Button -->
-                <form method="GET" action="{{ url('login') }}" class="form-inline my-2 my-lg-0 d-none d-md-block mr-3">
-                    <button type="submit" class="btn btn-login btn-navbar-right my-2 my-sm-0 px-4">Masuk</button>
+                <form method="GET" action="{{ auth()->user() ? url('logout') : url('login') }}"
+                    class="form-inline my-2 my-lg-0 d-none d-md-block mr-3">
+                    <button type="submit"
+                        class="btn btn-login btn-navbar-right my-2 my-sm-0 px-4">{{ auth()->user() ? 'Keluar' : 'Masuk' }}</button>
                 </form>
             </div>
         </nav>
@@ -89,7 +95,7 @@
         <div class="container-fluid" id="copyright">
             <div class="row border-top justify-content-center align-items-center pt-4 pb-4">
                 <div class="col-sm-12 text-gray-500 font-weight-light text-center">
-                    2019 Copyright Cho Travel - All Right Reserved - Made in Surakarta
+                    {{ date('Y') }} Copyright Cho Travel - All Right Reserved - Made in Surakarta
                 </div>
             </div>
         </div>

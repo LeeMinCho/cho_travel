@@ -68,7 +68,7 @@
                 @endforeach
             </div>
             <div class="text-center mt-3 mb-3">
-                <a href="#" class="btn btn-more-travel">More Travel</a>
+                <a href="{{ url('package_travel') }}" class="btn btn-more-travel">More Travel</a>
             </div>
         </div>
     </section>

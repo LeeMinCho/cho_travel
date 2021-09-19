@@ -17,4 +17,9 @@ class TravelOffer extends Model
     {
         return $this->belongsTo(TravelPackage::class);
     }
+
+    public function travelOfferable()
+    {
+        return $this->morphTo();
+    }
 }
