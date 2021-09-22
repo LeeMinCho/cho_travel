@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Admin;
 
 use App\Models\TravelPackage;
 use Livewire\WithFileUploads;
@@ -110,6 +110,6 @@ class GalleryComponent extends Component
         $data["travel_packages"] = TravelPackage::all();
         $data["galleries"] = $this->read();
         $data["count_data"] = Gallery::count();
-        return view('livewire.gallery-component', $data)->layout("layouts.admin.template");
+        return view('livewire.admin.gallery-component', $data)->layout("layouts.admin.template");
     }
 }

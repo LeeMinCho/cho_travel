@@ -52,6 +52,6 @@ class TravelPackageFrontComponent extends Component
     {
         $data["travel_offers"] = $this->read();
         $data["count_data"] = TravelOffer::count();
-        return view('livewire.travel-package-front-component', $data)->extends('layouts.frontend.template');
+        return view('livewire.travel-package-front-component', $data)->extends('layouts.template');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Admin;
 
 use App\Models\TravelPackage;
 use Livewire\WithPagination;
@@ -136,6 +136,6 @@ class TravelPackageComponent extends Component
         $data["countries"] = Country::all();
         $data["travel_packages"] = $this->read();
         $data["count_data"] = TravelPackage::count();
-        return view('livewire.travel-package-component', $data)->layout("layouts.admin.template");
+        return view('livewire.admin.travel-package-component', $data)->layout("layouts.admin.template");
     }
 }

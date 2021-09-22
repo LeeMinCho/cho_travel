@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Admin;
 
 use Livewire\WithPagination;
 use Livewire\Component;
@@ -89,6 +89,6 @@ class RoleComponent extends Component
     {
         $data["roles"] = $this->read();
         $data["count_data"] = Role::count();
-        return view('livewire.role-component', $data)->layout("layouts.admin.template");
+        return view('livewire.admin.role-component', $data)->layout("layouts.admin.template");
     }
 }

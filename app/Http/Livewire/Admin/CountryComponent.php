@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Admin;
 
 use Livewire\WithPagination;
 use Livewire\Component;
@@ -95,6 +95,6 @@ class CountryComponent extends Component
     {
         $data["countries"] = $this->read();
         $data["count_data"] = Country::count();
-        return view('livewire.country-component', $data)->layout("layouts.admin.template");
+        return view('livewire.admin.country-component', $data)->layout("layouts.admin.template");
     }
 }

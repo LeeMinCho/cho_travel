@@ -4,4 +4,7 @@
 <link rel="stylesheet" href="{{ url('assets') }}/frontend/styles/main.css">
 <!-- Font Awesome -->
 <link rel="stylesheet" href="{{ url('assets/backend') }}/plugins/fontawesome-free/css/all.min.css">
+
 @livewireStyles
+
+@stack('custom-style')
